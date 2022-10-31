@@ -4,27 +4,34 @@ import {
   Routes,
   BrowserRouter
 } from "react-router-dom";
+import React, { Suspense } from 'react';
+import Auth from './hoc/auth';
 
 import LandingPage from './components/views/LandingPage/LandingPage';
 import LoginPage from './components/views/LoginPage/LoginPage';
 import RegisterPage from './components/views/RegisterPage/RegisterPage';
-import Auth from './hoc/auth';
+import NavBar from './components/views/NavBar/NavBar';
+import Footer from './components/views/Footer/Footer';
 
 function App() {
   return (
-    <BrowserRouter>
-      <div>
-        {/* A <Switch> looks through its children <Route>s and
-          renders the first one that matches the current URL. */}
-        <Routes>
-          <Route exact path="/" element={Auth(LandingPage, null)}/>
+    <Suspense fallback={(<div>Loading...</div>)}>
+      <BrowserRouter>
+        <NavBar />
+        <div>
+          {/* A <Switch> looks through its children <Route>s and
+            renders the first one that matches the current URL. */}
+          <Routes>
+            <Route exact path="/" element={Auth(LandingPage, null)}/>
 
-          <Route exact path="/login" element={Auth(LoginPage, false)}/>
+            <Route exact path="/login" element={Auth(LoginPage, false)}/>
 
-          <Route exact path="/register" element={Auth(RegisterPage, false)}/>
-        </Routes>
-      </div>
-    </BrowserRouter>
+            <Route exact path="/register" element={Auth(RegisterPage, false)}/>
+          </Routes>
+        </div>
+        <Footer />
+      </BrowserRouter>
+    </Suspense>
   );
 }
 

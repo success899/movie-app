@@ -1,35 +1,61 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react';
+import {API_URL, API_KEY, IMAGE_URL} from '../../../Config';
+import MainImage from './Sections/MainImage';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
 function LandingPage() {
 
-  let navigate = useNavigate()
+  const [Movies, setMovies] = useState([])
+  const [MainMovieImage, setMainMovieImage] = useState(null)
 
   useEffect(() => {
-    axios.get('/api/hello')
-    .then(response => { console.log(response) })
-    }, [])
 
-    const onClickHandler = () => {
-      axios.get('/api/users/logout')
-      .then(response =>{
-        if(response.data.success){
-          navigate('/login')
-        } else {
-          alert('로그아웃 실패.!')
-        }
-      })
-    }
+    const endpoint = `${API_URL}movie/popular?api_key=${API_KEY}&language=en-US&page=1`;
+
+    axios.get(endpoint)
+        .then(response => {
+            setMovies([...response.results])
+            setMainMovieImage(response.results[0])
+        })
+
+    fetch(endpoint)
+        .then(response => response.json())
+        .then(response => {                
+            setMovies([...response.results])
+            setMainMovieImage(response.results[0])
+        })
+
+}, [])
+
 
   return (
-    <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100vh'}}>
-      <h2>시작 페이지</h2>
+    <div style={{width: '100%', margin: '0'}}>
 
-      <button onClick={onClickHandler}>
-        Logout
-      </button>
-  </div>
+      {/* Main Image */}
+      {MainMovieImage &&
+        <MainImage 
+          image={`${IMAGE_URL}w1280${MainMovieImage.backdrop_path}`}
+          title={MainMovieImage.original_title}
+          text={MainMovieImage.overview}
+        />
+      }
+
+      <div style={{width: '85%', margin: '1rem auto'}}>
+
+        <h2>Movies by latest</h2>
+        <hr />
+
+
+        {/* Movie Grid Cards */}
+
+
+      </div>
+
+      <div style={{display: 'flex', justifyContent: 'center'}}>
+        <button>Load More</button>
+      </div>
+
+    </div>
   )
 }
 
