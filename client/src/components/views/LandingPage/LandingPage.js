@@ -13,6 +13,7 @@ function LandingPage() {
   useEffect(() => {
     const endpoint = `${API_URL}movie/popular?api_key=${API_KEY}&language=en-US&page=1`;
     fetchMovies(endpoint)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
 }, [])
 
   const fetchMovies = (endpoint) => {
@@ -53,6 +54,7 @@ function LandingPage() {
           {Movies && Movies.map((movie, index) =>(
             <React.Fragment key={index}>
               <GridCards 
+                landingpage
                 image={movie.poster_path ?
                   `${IMAGE_URL}w500${movie.poster_path}` : null}
                 movieId={movie.id}

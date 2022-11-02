@@ -3,6 +3,8 @@ import {useParams} from 'react-router-dom';
 import {API_URL, API_KEY, IMAGE_URL} from '../../../Config';
 import MainImage from '../LandingPage/Sections/MainImage';
 import MovieInfo from './Sections/MovieInfo';
+import GridCards from '../commons/GridCards';
+import {Row} from 'antd';
 
 function MovieDetail() {
 
@@ -10,10 +12,12 @@ function MovieDetail() {
     // let {movieId} = useParams();    
 
     const [Movie, setMovie] = useState([])
+    const [MovieCasts, setMovieCasts] = useState([])
+    const [ActorToggle, setActorToggle] = useState(false)
 
     useEffect(() => {
 
-        let endpointCrew = `${API_URL}movie/${movieId}/credits?api_key=${API_KEY}&language=en-US`
+        let endpointCasts = `${API_URL}movie/${movieId}/credits?api_key=${API_KEY}&language=en-US`
         let endpointInfo = `${API_URL}movie/${movieId}?api_key=${API_KEY}`
 
         fetch(endpointInfo)
@@ -21,7 +25,18 @@ function MovieDetail() {
             .then(response => {
                 setMovie(response)
             })
+
+        fetch(endpointCasts)
+            .then(response => response.json())
+            .then(response => {
+                setMovieCasts(response.cast)
+            })
+
     }, [movieId])
+
+    const toggleActorView = () => {
+        setActorToggle(!ActorToggle)
+    }
 
 
     return (
@@ -46,9 +61,22 @@ function MovieDetail() {
             <br />
             {/* Actors Grid */}
             <div style={{display: 'flex', justifyContent: 'center', margin: '2rem'}}>
-                <button>Toggle Actor View</button>
+                <button onClick={toggleActorView}>Actor View</button>
             </div>
-
+            {ActorToggle &&
+                <Row gutter={[16,16]}>
+                    {MovieCasts && MovieCasts.map((cast, index) =>(
+                        <React.Fragment key={index}>
+                            <GridCards 
+                                detailpage
+                                image={cast.profile_path ?
+                                    `${IMAGE_URL}w500${cast.profile_path}` : null}
+                                CastName={cast.name}
+                            />
+                        </React.Fragment>
+                    ))}
+                </Row>
+            }  
 
         </div>
             
