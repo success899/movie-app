@@ -34,11 +34,11 @@ function LoginPage() {
       }}
       validationSchema={Yup.object().shape({
         email: Yup.string()
-          .email('Email is invalid')
-          .required('Email is required'),
+          .email('이메일이 잘못 되었습니다.')
+          .required('이메일을 입력해주세요.'),
         password: Yup.string()
-          .min(7, 'Password must be at least 7 characters')
-          .required('Password is required'),
+          .min(7, '암호는 7자 이상입니다.')
+          .required('암호를 입력해주세요.'),
       })}
       onSubmit={(values, { setSubmitting }) => {
         setTimeout(() => {
@@ -57,11 +57,11 @@ function LoginPage() {
                 }
                 navigate('/');
               } else {
-                setFormErrorMessage('Check out your Account or Password again')
+                setFormErrorMessage('계정 또는 암호를 확인해주세요.')
               }
             })
             .catch(err => {
-              setFormErrorMessage('Check out your Account or Password again')
+              setFormErrorMessage('계정 또는 암호를 확인해주세요.')
               setTimeout(() => {
                 setFormErrorMessage("")
               }, 3000);
@@ -92,7 +92,7 @@ function LoginPage() {
                 <Input
                     id="email"
                     prefix={<UserOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
-                    placeholder="Enter your email"
+                    placeholder="Email"
                     type="email"
                     value={values.email}
                     onChange={handleChange}
@@ -110,7 +110,7 @@ function LoginPage() {
                 <Input
                   id="password"
                   prefix={<LockOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
-                  placeholder="Enter your password"
+                  placeholder="Password"
                   type="password"
                   value={values.password}
                   onChange={handleChange}
@@ -138,7 +138,7 @@ function LoginPage() {
                     Log in
                 </Button>
                 </div>
-                Or <a href="/register">register now!</a>
+                Or <a href="/register">Signup now!</a>
               </Form.Item>
             </form>
           </div>
