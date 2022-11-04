@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Axios from 'axios';
+import { Button } from 'antd';
 
 function Favorite(props) {
 
@@ -12,12 +13,15 @@ function Favorite(props) {
     const [FavoriteCount, setFavoriteCount] = useState(0)
     const [Favorited, setFavorited] = useState(false)
 
-    useEffect(() =>{
+    let variables = {
+        userFrom: userFrom,
+        movieId: movieId,
+        movieTitle: movieTitle,
+        moviePost: moviePost,
+        movieRuntime: movieRuntime
+    }
 
-        let variables = {
-            userFrom,
-            movieId
-        }
+    useEffect(() =>{
 
         Axios.post('/api/favorite/favoritecount',variables)
             .then(response => {
@@ -38,11 +42,36 @@ function Favorite(props) {
                     alert('정보를 가져오는데 실패했습니다.')
                 }
             })
-    },[userFrom, movieId])
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[])
+
+    const onClickFavorite = () => {
+        if(Favorited){
+            Axios.post('/api/favorite/removeFavorite', variables)
+            .then(response => {
+                if(response.data.success) {
+                    setFavoriteCount(FavoriteCount-1)
+                    setFavorited(!Favorited)
+                } else {
+                    alert('Favorite 지우기 실패!')
+                }
+            })
+        } else {
+            Axios.post('/api/favorite/addFavorite', variables)
+            .then(response => {
+                if(response.data.success) {
+                    setFavoriteCount(FavoriteCount+1)
+                    setFavorited(!Favorited)
+                } else {
+                    alert('Favorite 추가 실패!')
+                }
+            })
+        }
+    }
 
     return (
     <div>
-        <button>{Favorited? "Not Favorite" : "Add to Favorite"} {FavoriteCount}</button>        
+        <Button onClick={onClickFavorite}>{Favorited? "Not Favorite" : "Add to Favorite"} {FavoriteCount}</Button>        
     </div>
     )
 }
