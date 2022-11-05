@@ -13,6 +13,7 @@ import RegisterPage from './components/views/RegisterPage/RegisterPage';
 import NavBar from './components/views/NavBar/NavBar';
 import Footer from './components/views/Footer/Footer';
 import MovieDetail from './components/views/MovieDetail/MovieDetail';
+import FavoritePage from './components/views/FavoritePage/FavoritePage';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
             <Route exact path="/login" element={Auth(LoginPage, false)}/>
             <Route exact path="/register" element={Auth(RegisterPage, false)}/>
             <Route exact path="/movie/:movieId" element={Auth(MovieDetail, null)}/>
+            <Route exact path="/favorite" element={Auth(FavoritePage, true)}/>
           </Routes>
         </div>
         <Footer />

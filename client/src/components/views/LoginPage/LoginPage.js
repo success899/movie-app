@@ -2,15 +2,13 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../../../_actions/user_action';
 import { useNavigate } from 'react-router-dom';
-import { Form, Input, Button, Checkbox, Typography } from 'antd';
+import { Form, Input, Button, Checkbox } from 'antd';
 import {
   UserOutlined,
   LockOutlined
 } from '@ant-design/icons';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-
-const { Title } = Typography;
 
 function LoginPage() {
 
@@ -85,7 +83,6 @@ function LoginPage() {
         return (
           <div className="app">
 
-            <Title level={2}>Log In</Title>
             <form onSubmit={handleSubmit} style={{ width: '350px', margin: '7rem auto 0 auto' }}>
 
               <Form.Item required>
