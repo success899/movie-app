@@ -1,14 +1,19 @@
 import React, {useEffect, useState} from 'react';
 import Axios from 'axios';
 import './FavoritePage.css';
-import { Button } from 'antd';
+import { Button, Popover } from 'antd';
+import {IMAGE_URL} from '../../../Config';
 
 function FavoritePage() {
 
     const [Favorites, setFavorites] = useState([])
 
     useEffect(() => {
-      Axios.post('/api/favorite/getFavoriteMovie', {userFrom: localStorage.getItem('userId')})
+        fetchFavoriedMovie()
+    }, [])
+
+    const fetchFavoriedMovie = () => {
+        Axios.post('/api/favorite/getFavoriteMovie', {userFrom: localStorage.getItem('userId')})
         .then(response => {
             if(response.data.success){
                 console.log(response.data)
@@ -17,7 +22,40 @@ function FavoritePage() {
                 alert('Favorite 정보를 가져오기 실패!')
             }
         })
-    }, [])
+    }
+
+    const onClickDelete = (movieId, userFrom) => {
+
+        const variables = {
+            movieId,
+            userFrom
+        }
+        Axios.post('/api/favorite/removeFavorite', variables)
+            .then(response => {
+                if(response.data.success){
+                    fetchFavoriedMovie()
+                } else {
+                    alert('Favorite 지우기 실패!')
+                }
+            })
+    }
+
+    const renderTitle = Favorites.map((info, index) => {
+
+        const content = (
+            <div>
+                {info.moviePost ? <img src={`${IMAGE_URL}w500${info.moviePost}`} /> : "No Image"}
+            </div>
+        )
+
+        return <tr key={index}>
+            <Popover content={content} title={`${info.movieTitle}`}>
+                <td>{info.movieTitle}</td>
+            </Popover>
+            <td>{info.movieRuntime} mins</td>
+            <td><Button onClick={()=>onClickDelete(info.movieId, info.userFrom)}>Remove</Button></td>
+        </tr>
+    })
     
     return (
         <div style={{width: '85%', margin: '3rem auto'}}>
@@ -34,13 +72,8 @@ function FavoritePage() {
                 </thead>
                 <tbody>
 
-                    {Favorites.map((info, index) => (
-                        <tr key={index}>
-                            <td>{info.movieTitle}</td>
-                            <td>{info.movieRuntime} mins</td>
-                            <td><Button>Remove</Button></td>
-                        </tr>
-                    ))}
+                    {renderTitle}
+
                 </tbody>
             </table>
         </div>
