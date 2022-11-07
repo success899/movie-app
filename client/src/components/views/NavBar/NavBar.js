@@ -3,6 +3,7 @@ import LeftMenu from './Sections/LeftMenu';
 import RightMenu from './Sections/RightMenu';
 import { Drawer, Button, Space } from 'antd';
 import './Sections/Navbar.css';
+import mainLogo from '../../../Images/Logo.png';
 
 function NavBar() {
   const [visible, setVisible] = useState(false)
@@ -18,7 +19,9 @@ function NavBar() {
   return (
     <nav className="menu" style={{zIndex: 5, width: '100%'}}>
       <div className="menu__logo">
-        <a href="/">Logo</a>
+        <a href="/">
+          <img src={mainLogo} alt="Logo" height="35rem" width="100rem"/>
+        </a>
       </div>
       <div className="menu__container">
         <div className="menu_left">
